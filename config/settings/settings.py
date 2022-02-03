@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'app.accounts.apps.AccountsConfig',
     'app.common.apps.CommonConfig',
     'app.company.apps.CompanyConfig',
+    'app.document.apps.DocumentConfig',
 
 ]
 
