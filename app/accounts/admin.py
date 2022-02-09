@@ -77,8 +77,10 @@ class AdminManager(UserAdmin):
 
     def get_queryset(self, request):
         user = request.user
-        return super().get_queryset(request).filter(id=user.id)
-
+        if user.type == 2:
+            return super().get_queryset(request).filter(id=user.id)
+        else:
+            return super().get_queryset(request)
 
     fieldsets = (
         (None, {"fields": ("name", "cpf", "email", "password")}),

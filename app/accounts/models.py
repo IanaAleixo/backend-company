@@ -64,6 +64,8 @@ class Customer(User):
         self.is_staff = True
         self.is_superuser = False
         self.type = 1
+        if self.manager.is_active == False:
+            self.is_staff = False
         return super().save(*args, **kwargs)
 
     def clean(self) -> None:
@@ -81,10 +83,9 @@ class Manager(User):
         verbose_name_plural = "Gerentes"
     
     def save(self, *args, **kwargs):
-        if not self.pk:
-            self.is_staff = True
-            self.is_superuser = False
-            self.type = 2
+        self.is_staff = True
+        self.is_superuser = False
+        self.type = 2
         super().save(*args, **kwargs)
         self.groups.add(1)
 
