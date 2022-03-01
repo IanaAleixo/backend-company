@@ -1,6 +1,7 @@
 from django.db import models
 from validate_docbr import CNPJ
 from django.core.exceptions import ValidationError
+from app.accounts.models import Manager
 
 class Company(models.Model):
     name = models.CharField(max_length=255, verbose_name="Nome")
@@ -9,6 +10,9 @@ class Company(models.Model):
     cnpj = models.CharField(max_length=20, verbose_name="CNPJ")
     is_active = models.BooleanField(default=True,help_text=("Designates whether this company should be treated as active. Unselect this instead of deleting accounts."), verbose_name="Ativo?",)
     district = models.CharField(max_length=255, blank=True, null=True, verbose_name=("Bairro"))
+    manager = models.ManyToManyField(
+        Manager, verbose_name=("Gerente"), blank=True, null=True
+    )
 
     def __str__(self) -> str:
         return self.name
@@ -19,4 +23,10 @@ class Company(models.Model):
             return super().clean()   
         else:
             raise ValidationError('CNPJ inválido')
+    
+    def save(self, *args, **kwargs):
+        if self.is_active == False:
+            self.manager.is_staff = False
+            self.manager.is_active = False
+        return super().save(*args, **kwargs)
 

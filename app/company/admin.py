@@ -10,4 +10,3 @@ class AdminCompany(admin.ModelAdmin):
     list_filter = ("is_active",)
     search_fields = ("name",)
     ordering = ("name",)
-
